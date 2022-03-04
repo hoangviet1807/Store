@@ -1,0 +1,39 @@
+.logo {
+    float: left;
+    width: 120px;
+    height: 31px;
+    margin: 16px 24px 16px 0;
+    background: rgba(255, 255, 255, 0.3);
+  }
+  
+.ant-row-rtl .logo {
+    float: right;
+    margin: 16px 0 16px 24px;
+  }
+  
+  .site-layout-background {
+    background: #fff;
+  }
+span{
+    padding: 0 20px;
+    cursor: pointer;
+}
+
+.img{
+    width: 25%;
+    padding: 0 20px
+}
+
+.product{
+    cursor: pointer;
+    display: flex;
+}
+
+.name_product{
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #333;
+    font-size: 16px;
+}
