@@ -1,34 +1,62 @@
-import { Layout } from 'antd';
-import './style.css'
-
-const { Content } = Layout;
-
-
+import { Button, Layout } from "antd";
+import useProduct from "../../hooks/useGetProduct";
+import "./style.css";
+import { useNavigate } from "react-router-dom";
 export const HomePage = () => {
+  const navigate = useNavigate();
+  const { data, isLoading } = useProduct();
 
-    return (
+  const handleClickProduct = (id) => {
+    console.log("val", id);
+    navigate(`/${id}`, { state: { id } });
+  };
+  return (
+    <>
+      {!isLoading && (
         <Layout>
-            <Layout >
-                <Content
-                    className="site-layout-background"
-                    style={{
-                        padding: '30px 10%',
-                        margin: 0,
-                        minHeight: 280,
-                    }}
+          <Layout>
+            <div
+              className="container"
+              style={{
+                padding: "30px 10%",
+                display: "flex",
+                flexWrap: "wrap",
+              }}
+            >
+              {data.map((val) => (
+                <div
+                  key={val._id}
+                  className="home-product"
+                  onClick={() => handleClickProduct(val._id)}
                 >
-                    <div className='product'>
-                        <div className='img'>
-                            <img src='https://bizweb.dktcdn.net/thumb/grande/100/318/614/products/2-21.jpg?v=1643170716000' alt='product' style={{ width: '100%' }} />
-                            <div className='info'>
-                                <div className='name_product'>INTRO FLEECE VARSITY JACKET</div>
-                                <div>1.195.000₫</div>
-                            </div>
-
-                        </div>
+                  <div className="image">
+                    <img
+                      src={val.attachment}
+                      alt="product"
+                      style={{ width: "100%" }}
+                    />
+                  </div>
+                  <div className="middle">
+                    <div className="option">
+                      <Button style={{ marginRight: "10px" }}>TÙY CHỌN</Button>
+                      <Button>THÊM VÀO GIỎ HÀNG</Button>
                     </div>
-                </Content>
-            </Layout>
+                  </div>
+                  <div className="info">
+                    <div className="name_product">{val.name}</div>
+                    <div>
+                      {val.price.toLocaleString("it-IT", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Layout>
         </Layout>
-    )
-}
+      )}
+    </>
+  );
+};
