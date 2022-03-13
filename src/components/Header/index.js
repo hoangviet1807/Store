@@ -1,14 +1,23 @@
 import "antd/dist/antd.css";
-import { Layout, Menu } from "antd";
+import { Layout, Menu, Badge, Button } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import "./style.css";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const { SubMenu } = Menu;
 
 export const Header = () => {
   const navigate = useNavigate();
+  const cart = useSelector((state) => state.defaultReducers.cart);
+
+  const renderQuantity = () => {
+    return cart.reduce((sum, item) => {
+      return (sum += item.quantity);
+    }, 0);
+  };
+
   return (
     <Layout>
       <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["1"]}>
@@ -59,7 +68,13 @@ export const Header = () => {
           style={{ placeContent: "center", width: "100%" }}
         >
           <div>
-            <ShoppingCartOutlined />
+            <Badge count={renderQuantity()} size="small">
+              <Button
+                type="text"
+                // shape="circle"
+                icon={<ShoppingCartOutlined />}
+              />
+            </Badge>
           </div>
         </Menu>
       </div>

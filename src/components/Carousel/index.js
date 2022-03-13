@@ -1,17 +1,17 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import AliceCarousel from "react-alice-carousel";
 import "react-alice-carousel/lib/alice-carousel.css";
 import "./style.css";
+import { useState } from "react";
 
 export const Carousel = ({ items, handleClick }) => {
   const imgStyle = {
-    height: "100%",
     width: "100%",
     objectFit: "cover",
+    height: "100px",
   };
 
-  const carouselItems = items?.map((val) => (
+  const carouselItems = items?.map((val, index) => (
     <div
       className="item"
       onClick={() => {
@@ -34,11 +34,14 @@ export const Carousel = ({ items, handleClick }) => {
     },
   };
   return (
-    <AliceCarousel
-      mouseTracking
-      responsive={responsive}
-      items={carouselItems}
-      disableDotsControls
-    />
+    <div>
+      <AliceCarousel
+        mouseTracking
+        responsive={responsive}
+        items={carouselItems}
+        disableDotsControls
+        touchTracking
+      />
+    </div>
   );
 };

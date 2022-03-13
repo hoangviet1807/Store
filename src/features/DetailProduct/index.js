@@ -1,5 +1,5 @@
-import { Button } from "antd";
-import React, { useCallback, useState } from "react";
+import { Button, Tooltip } from "antd";
+import React, { useEffect, useState } from "react";
 import "./style.css";
 import { Input } from "antd";
 import "react-inner-image-zoom/lib/InnerImageZoom/styles.css";
@@ -7,15 +7,34 @@ import InnerImageZoom from "react-inner-image-zoom";
 import useDetailProduct from "../../hooks/useGetDetailProduct";
 import { useLocation } from "react-router-dom";
 import { Carousel } from "../../components/Carousel";
+import { changeColor } from "../../util/convertColor";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../redux/actions/productAction";
+import { Spin, Space } from "antd";
+import { Modal, SimpleModal } from "../../components/Modal";
 
 export const DetailProduct = () => {
+  const dispatch = useDispatch();
   const location = useLocation();
   const id = location.state.id;
   const { data, isLoading } = useDetailProduct(id);
   const [image, setImage] = useState();
-  const [color, setColor] = useState();
-  const [size, setSize] = useState();
+  const [colorSelected, setColorSelected] = useState();
+  const [sizeSelected, setSizeSelected] = useState();
+  const [quantity, setQuantity] = useState(1);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
+  const renderLoading = () => {
+    if (isLoading) {
+      return (
+        <div style={{ textAlignLast: "center", padding: "10% 0" }}>
+          <Space size="middle">
+            <Spin size="large" />
+          </Space>
+        </div>
+      );
+    }
+  };
   const items = [
     "https://www.w3schools.com/howto/img_forest.jpg",
     "https://images.unsplash.com/photo-1612151855475-877969f4a6cc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aGQlMjBpbWFnZXxlbnwwfHwwfHw%3D&w=1000&q=80",
@@ -28,10 +47,41 @@ export const DetailProduct = () => {
     "https://bizweb.dktcdn.net/thumb/grande/100/318/614/products/2-15.jpg?v=1646202684000",
   ];
 
-  console.log(data);
+  const handleAddToCart = (product) => {
+    const payload = {
+      id: product._id,
+      name: product.name,
+      price: product.price,
+      color: colorSelected ? colorSelected : data?.color[0],
+      size: sizeSelected ? sizeSelected : data?.size[0],
+      image: product.attachment,
+      quantity: quantity,
+    };
+    dispatch(addToCart(payload));
+    setIsModalVisible(true);
+  };
+
+  useEffect(() => {
+    if (data) {
+      setColorSelected(data?.colors[0]);
+      setSizeSelected(data?.size[0]);
+    }
+  }, [data]);
+
+  const renderModal = () => {
+    return (
+      <SimpleModal
+        isModalVisible={isModalVisible}
+        setIsModalVisible={setIsModalVisible}
+      >
+        /
+      </SimpleModal>
+    );
+  };
 
   return (
     <>
+      {renderLoading()}
       {!isLoading && data && (
         <div
           style={{
@@ -40,6 +90,7 @@ export const DetailProduct = () => {
             justifyContent: "center",
           }}
         >
+          {renderModal()}
           <div
             style={{
               width: "100%",
@@ -66,6 +117,7 @@ export const DetailProduct = () => {
                     zoomPreload={true}
                     fullscreenOnMobile={true}
                     zoomScale={1.5}
+                    style
                   />
                 </div>
 
@@ -103,15 +155,43 @@ export const DetailProduct = () => {
                 <div>Màu sắc:</div>
                 <div className="colors">
                   {data.colors.map((color, index) => (
-                    <div className="color" key={index}></div>
+                    <Tooltip title={color} key={index}>
+                      <div
+                        onClick={() => setColorSelected(color)}
+                        style={{ backgroundColor: changeColor(color) }}
+                        className={
+                          color === colorSelected ? "color_selected" : "color"
+                        }
+                      >
+                        <span style={{ visibility: "hidden" }}>{color}</span>
+                      </div>
+                    </Tooltip>
                   ))}
                 </div>
                 {/* Chon size */}
                 <div className="size">
                   {data.size.map((option, index) => (
-                    <Button key={index} style={{ margin: "10px 10px 10px 0" }}>
-                      Size {option}
-                    </Button>
+                    <div
+                      className={
+                        option === sizeSelected
+                          ? "size_clothes_selected"
+                          : "size_clothes"
+                      }
+                      key={index}
+                    >
+                      <Button
+                        type="text"
+                        onClick={() => setSizeSelected(option)}
+                      >
+                        <span
+                          className={
+                            option === sizeSelected ? "size_label" : ""
+                          }
+                        >
+                          Size {option}
+                        </span>
+                      </Button>
+                    </div>
                   ))}
                 </div>
                 {/* Chon so luong */}
@@ -119,12 +199,16 @@ export const DetailProduct = () => {
                   <header>Số lượng:</header>
                   <div style={{ padding: "20px 0" }}>
                     <Input
+                      onChange={(e) => setQuantity(e.target.value)}
                       defaultValue={1}
                       size="large"
+                      min={1}
                       style={{ width: "80px", marginRight: "10px" }}
                       type="number"
                     />
-                    <Button size="large">Thêm vào giỏ hàng</Button>
+                    <Button onClick={() => handleAddToCart(data)} size="large">
+                      Thêm vào giỏ hàng
+                    </Button>
                   </div>
                 </div>
               </div>
