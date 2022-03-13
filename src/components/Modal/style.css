@@ -1,0 +1,19 @@
+.ant-modal-header {
+  position: relative;
+  text-align: center;
+  border-bottom: none;
+}
+
+.ant-modal-header::after {
+  content: "\2705";
+  position: absolute;
+  left: 33%;
+  top: 29%;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+}
+
+.ant-modal-header {
+  padding: 15px;
+}
