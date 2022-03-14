@@ -72,6 +72,7 @@ export const Header = () => {
               <Button
                 type="text"
                 // shape="circle"
+                onClick={() => navigate("/cart")}
                 icon={<ShoppingCartOutlined />}
               />
             </Badge>

@@ -6,6 +6,7 @@ import { DetailProduct } from "./features/DetailProduct";
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { Cart } from "./features/Cart";
 
 const queryClient = new QueryClient();
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/:id" element={<DetailProduct />} />
+          <Route path="/cart" element={<Cart />} />
         </Routes>
         <Footer />
       </BrowserRouter>
