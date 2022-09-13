@@ -9,3 +9,9 @@ export const getDetailProduct = (id) => {
     .get(`http://localhost:5000/product/${id}`)
     .then((res) => res.data);
 };
+
+export const getProductByType = (category) => {
+  return axios
+    .get(`http://localhost:5000/product/category/${category}`)
+    .then((res) => res.data);
+};

@@ -6,12 +6,12 @@ import "react-inner-image-zoom/lib/InnerImageZoom/styles.css";
 import InnerImageZoom from "react-inner-image-zoom";
 import useDetailProduct from "../../hooks/useGetDetailProduct";
 import { useLocation } from "react-router-dom";
-import { Carousel } from "../../components/Carousel";
 import { changeColor } from "../../util/convertColor";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../redux/actions/productAction";
 import { Spin, Space } from "antd";
-import { Modal, SimpleModal } from "../../components/Modal";
+import { SimpleModal } from "../../components/Modal";
+import { Carousel1 } from "../../components/Carousel";
 
 export const DetailProduct = () => {
   const dispatch = useDispatch();
@@ -23,6 +23,19 @@ export const DetailProduct = () => {
   const [sizeSelected, setSizeSelected] = useState();
   const [quantity, setQuantity] = useState(1);
   const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const addDataIntoCache = (cacheName, url, response) => {
+    // Converting our response into Actual Response form
+    const data = new Response(JSON.stringify(response));
+
+    if ("caches" in window) {
+      // Opening given cache and putting our data into it
+      caches.open(cacheName).then((cache) => {
+        cache.put(url, data);
+        alert("Data Added into cache!");
+      });
+    }
+  };
 
   const renderLoading = () => {
     if (isLoading) {
@@ -55,7 +68,7 @@ export const DetailProduct = () => {
       color: colorSelected ? colorSelected : data?.color[0],
       size: sizeSelected ? sizeSelected : data?.size[0],
       image: product.attachment,
-      quantity: quantity,
+      quantity: parseInt(quantity),
     };
     dispatch(addToCart(payload));
     setIsModalVisible(true);
@@ -117,26 +130,19 @@ export const DetailProduct = () => {
                     zoomPreload={true}
                     fullscreenOnMobile={true}
                     zoomScale={1.5}
-                    style
+                    className="zoom-image"
                   />
                 </div>
 
                 <div>
-                  <Carousel items={items} handleClick={setImage} />
+                  <Carousel1 items={items} handleClick={setImage} />
                 </div>
               </div>
 
               <div className="info-product">
                 <div className="name">{data.name}</div>
                 {/* Tinh trang */}
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    padding: "15px 0",
-                    color: "black",
-                  }}
-                >
+                <div className="brand-info">
                   <div className="brand">Thương hiệu: NEEDS OF WISDOM®</div>
                   <span className="hidden-xs">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
                   <div className="status">
@@ -169,6 +175,7 @@ export const DetailProduct = () => {
                   ))}
                 </div>
                 {/* Chon size */}
+                <div>Kích thước:</div>
                 <div className="size">
                   {data.size.map((option, index) => (
                     <div
@@ -195,18 +202,31 @@ export const DetailProduct = () => {
                   ))}
                 </div>
                 {/* Chon so luong */}
-                <div>
-                  <header>Số lượng:</header>
-                  <div style={{ padding: "20px 0" }}>
-                    <Input
-                      onChange={(e) => setQuantity(e.target.value)}
-                      defaultValue={1}
+                <div className="action">
+                  <div>
+                    <header>Số lượng:</header>
+                    <div className="input-quantity">
+                      <Input
+                        onChange={(e) => setQuantity(e.target.value)}
+                        defaultValue={1}
+                        size="large"
+                        style={{ textAlign: "center" }}
+                        min={1}
+                        type="number"
+                      />
+                    </div>
+                    <Button
+                      className="btn-add"
+                      onClick={() => {
+                        handleAddToCart(data);
+                        addDataIntoCache(
+                          "MyCache",
+                          "https://localhost:300",
+                          "SampleData"
+                        );
+                      }}
                       size="large"
-                      min={1}
-                      style={{ width: "80px", marginRight: "10px" }}
-                      type="number"
-                    />
-                    <Button onClick={() => handleAddToCart(data)} size="large">
+                    >
                       Thêm vào giỏ hàng
                     </Button>
                   </div>

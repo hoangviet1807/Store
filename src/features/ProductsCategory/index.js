@@ -1,14 +1,17 @@
 import { Button, Layout } from "antd";
 import useProduct from "../../hooks/useGetProduct";
 import "./style.css";
-import { useNavigate } from "react-router-dom";
-export const HomePage = () => {
+import { useLocation, useNavigate } from "react-router-dom";
+import useGetCategoryProduct from "../../hooks/useGetCategoryProduct";
+export const ProductByCategory = () => {
   const navigate = useNavigate();
-  const { data, isLoading } = useProduct();
-
+  const location = useLocation();
+  const category = location.pathname.split("/").pop();
+  const { data, isLoading } = useGetCategoryProduct(category);
   const handleClickProduct = (id) => {
     navigate(`/${id}`, { state: { id } });
   };
+
   return (
     <>
       {!isLoading && (
