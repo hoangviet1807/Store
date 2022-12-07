@@ -1,20 +1,21 @@
-import { Button, Layout } from "antd";
-import useProduct from "../../hooks/useGetProduct";
+import { Button, Layout, Spin } from "antd";
 import "./style.css";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useGetCategoryProduct from "../../hooks/useGetCategoryProduct";
+import { configImg } from "../../common/constant";
 export const ProductByCategory = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const category = location.pathname.split("/").pop();
-  const { data, isLoading } = useGetCategoryProduct(category);
+  const params = useParams()
+  const category = params.category
+  const { data, isLoading, isFetching, isSuccess } = useGetCategoryProduct(category);
   const handleClickProduct = (id) => {
     navigate(`/${id}`, { state: { id } });
   };
 
   return (
     <>
-      {!isLoading && (
+      {(!isSuccess) && <Spin style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }} size="large" />}
+      {(isSuccess) && (
         <Layout>
           <Layout>
             <div className="container">
@@ -26,7 +27,7 @@ export const ProductByCategory = () => {
                 >
                   <div className="image">
                     <img
-                      src={val.attachment}
+                      src={configImg + val.attachment[0].preview}
                       alt="product"
                       style={{ width: "100%" }}
                     />

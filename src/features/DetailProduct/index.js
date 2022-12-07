@@ -12,6 +12,8 @@ import { addToCart } from "../../redux/actions/productAction";
 import { Spin, Space } from "antd";
 import { SimpleModal } from "../../components/Modal";
 import { Carousel1 } from "../../components/Carousel";
+import { configImg } from "../../common/constant";
+import { ENV } from "../../config/config";
 
 export const DetailProduct = () => {
   const dispatch = useDispatch();
@@ -24,23 +26,11 @@ export const DetailProduct = () => {
   const [quantity, setQuantity] = useState(1);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const addDataIntoCache = (cacheName, url, response) => {
-    // Converting our response into Actual Response form
-    const data = new Response(JSON.stringify(response));
-
-    if ("caches" in window) {
-      // Opening given cache and putting our data into it
-      caches.open(cacheName).then((cache) => {
-        cache.put(url, data);
-        alert("Data Added into cache!");
-      });
-    }
-  };
 
   const renderLoading = () => {
     if (isLoading) {
       return (
-        <div style={{ textAlignLast: "center", padding: "10% 0" }}>
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }} size="large" >
           <Space size="middle">
             <Spin size="large" />
           </Space>
@@ -48,17 +38,6 @@ export const DetailProduct = () => {
       );
     }
   };
-  const items = [
-    "https://www.w3schools.com/howto/img_forest.jpg",
-    "https://images.unsplash.com/photo-1612151855475-877969f4a6cc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aGQlMjBpbWFnZXxlbnwwfHwwfHw%3D&w=1000&q=80",
-    "https://static.remove.bg/remove-bg-web/726c8211ef4fdb5ce44accdf843f9bab4d2a356a/assets/start_remove-c851bdf8d3127a24e2d137a55b1b427378cd17385b01aec6e59d5d4b5f39d2ec.png",
-    "https://bizweb.dktcdn.net/thumb/grande/100/318/614/products/2-15.jpg?v=1646202684000",
-
-    "https://www.w3schools.com/howto/img_forest.jpg",
-    "https://images.unsplash.com/photo-1612151855475-877969f4a6cc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aGQlMjBpbWFnZXxlbnwwfHwwfHw%3D&w=1000&q=80",
-    "https://static.remove.bg/remove-bg-web/726c8211ef4fdb5ce44accdf843f9bab4d2a356a/assets/start_remove-c851bdf8d3127a24e2d137a55b1b427378cd17385b01aec6e59d5d4b5f39d2ec.png",
-    "https://bizweb.dktcdn.net/thumb/grande/100/318/614/products/2-15.jpg?v=1646202684000",
-  ];
 
   const handleAddToCart = (product) => {
     const payload = {
@@ -67,7 +46,7 @@ export const DetailProduct = () => {
       price: product.price,
       color: colorSelected ? colorSelected : data?.color[0],
       size: sizeSelected ? sizeSelected : data?.size[0],
-      image: product.attachment,
+      image: product.attachment[0].fileName,
       quantity: parseInt(quantity),
     };
     dispatch(addToCart(payload));
@@ -87,7 +66,6 @@ export const DetailProduct = () => {
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}
       >
-        /
       </SimpleModal>
     );
   };
@@ -121,21 +99,21 @@ export const DetailProduct = () => {
                   }}
                 >
                   <InnerImageZoom
-                    src={image ? image : data.attachment}
-                    width={500}
-                    height={500}
+                    src={image ? ENV + image : ENV + data.attachment[0].fileName}
+                    // width='100%'
+                    // height={500}
                     hasSpacer={true}
-                    zoomSrc={image ? image : data.attachment}
+                    zoomSrc={image ? ENV + image : ENV + data.attachment[0].fileName}
                     zoomType="hover"
                     zoomPreload={true}
                     fullscreenOnMobile={true}
-                    zoomScale={1.5}
+                    zoomScale={0.3}
                     className="zoom-image"
                   />
                 </div>
 
                 <div>
-                  <Carousel1 items={items} handleClick={setImage} />
+                  <Carousel1 items={data.attachment} handleClick={setImage} />
                 </div>
               </div>
 
@@ -219,11 +197,6 @@ export const DetailProduct = () => {
                       className="btn-add"
                       onClick={() => {
                         handleAddToCart(data);
-                        addDataIntoCache(
-                          "MyCache",
-                          "https://localhost:300",
-                          "SampleData"
-                        );
                       }}
                       size="large"
                     >

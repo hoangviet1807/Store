@@ -1,19 +1,22 @@
 import "antd/dist/antd.css";
-import { Layout, Menu, Badge, Button, Drawer } from "antd";
+import { Layout, Menu, Badge, Button, Drawer, Input } from "antd";
 import { MenuOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import "./style.css";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Mobile } from "../common/isMobile";
+import { useQueryClient } from "react-query";
 
 const { SubMenu } = Menu;
 
 export const Header = () => {
+  const queryClient = useQueryClient()
   const navigate = useNavigate();
   const cart = useSelector((state) => state.defaultReducers.cart);
   const isMobile = Mobile();
   const [visible, setVisible] = useState(false);
+  const [searchText, setSearchText] = useState("")
 
   const renderQuantity = () => {
     return cart.reduce((sum, item) => {
@@ -28,7 +31,17 @@ export const Header = () => {
     setVisible(false);
   };
 
-  const tee = "tee";
+  const handleChange = (e) => {
+    setSearchText(e.target.value)
+  }
+
+  const handleSearch = () => {
+    queryClient.removeQueries('search_product')
+    navigate(`/search/${searchText}`);
+
+
+  }
+
   const defaultMenu = () => {
     return (
       <div className="menu">
@@ -49,7 +62,7 @@ export const Header = () => {
           <SubMenu key="SubMenu" title="CLOTHING">
             <Menu.Item
               onClick={() => {
-                navigate(`/collection/${tee}`);
+                navigate(`/collection/tee`);
               }}
               key="setting:1"
             >
@@ -97,9 +110,11 @@ export const Header = () => {
             CONTACT
           </Menu.Item>
         </Menu>
-
         <Menu theme="light" mode="horizontal" className="icon-cart-fs">
-          <div>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div>
+              <Input onChange={handleChange} onPressEnter={handleSearch} />
+            </div>
             <Badge count={renderQuantity()} size="small">
               <Button
                 type="text"
@@ -223,11 +238,16 @@ export const Header = () => {
           }}
         >
           <div>SDT: 0292384723</div>
-          <div style={{ padding: "0 10px" }}>
-            <span>Dang nhap</span>
-            <span>Dang ky</span>
-            <span>Lien he</span>
-          </div>
+          {/* <div className="action">
+            <span>Đăng nhập</span>
+            <span>Đăng ký</span>
+            <span>Liên hệ</span>
+          </div> */}
+          <ul className="action">
+            <li>Đăng nhập</li>
+            <li>Đăng ký</li>
+            <li>Liên hệ</li>
+          </ul>
         </div>
       </Menu>
       <div
@@ -241,15 +261,14 @@ export const Header = () => {
         <div className="sidenav">
           <MenuOutlined onClick={showDrawer} />
         </div>
-        <img
+        {/* <img
           src="https://bizweb.dktcdn.net/100/318/614/themes/667160/assets/logo.png?1644389389404"
           alt="logo"
-        />
+        /> */}
         <div className="cart-responsive">
           <Badge count={renderQuantity()} size="small">
             <Button
               type="text"
-              // shape="circle"
               onClick={() => navigate("/cart")}
               icon={<ShoppingCartOutlined />}
             />

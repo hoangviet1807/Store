@@ -1,7 +1,9 @@
 import React from "react";
 import { Modal, Button } from "antd";
 import "./style.css";
+import { useNavigate } from "react-router-dom";
 export const SimpleModal = ({ isModalVisible, setIsModalVisible }) => {
+  const navigate = useNavigate()
   const handleOk = () => {
     setIsModalVisible(false);
   };
@@ -10,12 +12,16 @@ export const SimpleModal = ({ isModalVisible, setIsModalVisible }) => {
     setIsModalVisible(false);
   };
 
+  const handleClickToCart = () => {
+    navigate(`/cart`);
+  }
+
   return (
     <>
       <Modal
         centered
         title="Thông báo"
-        visible={isModalVisible}
+        open={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
         footer={null}
@@ -39,6 +45,7 @@ export const SimpleModal = ({ isModalVisible, setIsModalVisible }) => {
               fontWeight: 700,
               margin: "0 5px",
             }}
+            onClick={handleCancel}
           >
             Tiếp tục mua sắm
           </Button>
@@ -51,6 +58,7 @@ export const SimpleModal = ({ isModalVisible, setIsModalVisible }) => {
               fontWeight: 700,
               margin: "0 5px",
             }}
+            onClick={handleClickToCart}
           >
             Xem giỏ hàng
           </Button>

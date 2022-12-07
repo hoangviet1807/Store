@@ -12,6 +12,8 @@ const initialState = {
   productDetail: null,
 };
 
+
+
 export const defaultReducers = (state = initialState, action) => {
   let { type, payload } = action;
   switch (type) {

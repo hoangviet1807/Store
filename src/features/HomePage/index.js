@@ -2,6 +2,8 @@ import { Button, Layout } from "antd";
 import useProduct from "../../hooks/useGetProduct";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
+import { Spin } from 'antd';
+import { ENV } from "../../config/config";
 export const HomePage = () => {
   const navigate = useNavigate();
   const { data, isLoading } = useProduct();
@@ -9,8 +11,11 @@ export const HomePage = () => {
   const handleClickProduct = (id) => {
     navigate(`/${id}`, { state: { id } });
   };
+
+  console.log("data", data);
   return (
     <>
+      {isLoading && <Spin style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }} size="large" />}
       {!isLoading && (
         <Layout>
           <Layout>
@@ -23,9 +28,10 @@ export const HomePage = () => {
                 >
                   <div className="image">
                     <img
-                      src={val.attachment}
+                      src={ENV + val.attachment[0].fileName}
                       alt="product"
-                      style={{ width: "100%" }}
+                      style={{ width: "100%", objectFit: 'cover', height: '22em' }}
+                      loading="lazy"
                     />
                   </div>
                   <div className="middle">

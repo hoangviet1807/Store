@@ -18,6 +18,14 @@
   padding: 10px 0;
 }
 
+.action{
+  display: flex;
+}
+
+.action li{
+  padding: 0px 5px;
+}
+
 @media screen and (max-width: 1023px) {
   .sidenav {
     visibility: visible;

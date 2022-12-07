@@ -1,0 +1,63 @@
+.container-checkout{
+    /* width: 100%;
+    background-color: white;
+    display: flex;*/
+    margin: 5em; 
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    display: flex;
+}
+
+.info-customer{
+    width: 50%;
+}
+
+.box-info-customer{
+    width: 75%;
+    margin-left: auto;
+    padding: 0 2em;
+}
+
+.info-product-checkout{
+    width: 50%;
+}
+
+.product-checkout{
+    width: 55%;
+    padding: 0 2em;
+}
+
+.box-product{
+    display: flex;
+    flex-direction: column;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+.box-voucher{
+    display: flex;
+    padding: 20px 0;
+    border-top: 1px solid #ededed;
+    border-bottom: 1px solid #ededed;
+}
+
+.box-total{
+    display: flex;
+    /* padding: 0 0 20px 0; */
+    border-bottom: 1px solid #ededed;
+}
+
+.img-product{
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    width: 20%;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.ant-select:not(.ant-select-customize-input) .ant-select-selector {
+    border-radius: 20px
+  }

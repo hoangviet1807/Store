@@ -1,0 +1,1 @@
+export const configImg = 'data:image/jpeg;base64,'

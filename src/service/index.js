@@ -15,3 +15,31 @@ export const getProductByType = (category) => {
     .get(`http://localhost:5000/product/category/${category}`)
     .then((res) => res.data);
 };
+
+export const searchProduct = (searchText) => {
+  return axios
+    .get(`http://localhost:5000/product/search/${searchText}`)
+    .then((res) => res.data);
+}
+
+export const register = (data) => {
+  return axios
+    .post(`http://localhost:5000/user/register`, data)
+    .then((res) => res.data);
+}
+
+export const login = (data) => {
+  return axios
+    .post(`http://localhost:5000/user/login`, data)
+    .then((res) => res.data);
+}
+
+export const createProduct = (data) => {
+  return axios
+    .post(`http://localhost:5000/product`, data)
+    .then((res) => res.data)
+}
+
+export const getProvince = (code) => {
+  return axios.get(`https://provinces.open-api.vn/api/w/`).then((res) => res.data);
+};

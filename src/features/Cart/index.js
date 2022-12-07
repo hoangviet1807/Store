@@ -10,8 +10,11 @@ import {
 } from "../../redux/actions/productAction";
 import { Mobile } from "../../components/common/isMobile";
 import "./style.css";
+import { useNavigate } from "react-router-dom";
+import { ENV } from "../../config/config";
 
 export const Cart = () => {
+  const navigate = useNavigate()
   const isMobile = Mobile();
   const cart = useSelector((state) => state.defaultReducers.cart);
   const dispatch = useDispatch();
@@ -49,8 +52,8 @@ export const Cart = () => {
       key: "image",
       render: (text, row, index) => (
         <img
-          style={{ width: "100px", height: "100px" }}
-          src={row.image}
+          style={{ width: "100px", height: "100px", objectFit: 'cover' }}
+          src={ENV + row.image}
           alt=""
         />
       ),
@@ -87,6 +90,8 @@ export const Cart = () => {
             border: "1px solid #dddddd",
             width: "fit-content",
             borderRadius: "15px",
+            display: 'flex',
+            alignItems: 'center'
           }}
         >
           <Button
@@ -129,9 +134,10 @@ export const Cart = () => {
       key: "image",
       render: (text, row, index) => (
         <img
-          style={{ width: "100px", height: "100px" }}
-          src={row.image}
+          style={{ width: "100px", height: "100px", objectFit: 'cover' }}
+          src={ENV + row.image}
           alt=""
+          loading="lazy"
         />
       ),
     },
@@ -165,6 +171,8 @@ export const Cart = () => {
               border: "1px solid #dddddd",
               width: "fit-content",
               borderRadius: "15px",
+              display: 'flex',
+              alignItems: 'center'
             }}
           >
             <Button
@@ -201,6 +209,11 @@ export const Cart = () => {
     }, 0);
   };
 
+
+  const handleNavigateToCheckout = () => {
+    navigate('/checkout')
+  }
+
   return (
     <div className="container-cart">
       <div className="table-cart">
@@ -236,6 +249,7 @@ export const Cart = () => {
               color: "white",
               fontSize: "16px",
             }}
+            onClick={() => handleNavigateToCheckout()}
           >
             THANH TOÁN
           </Button>
