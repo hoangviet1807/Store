@@ -1,6 +1,7 @@
 .info-product {
-  padding-left: 100px;
+  padding-left: 50px;
   padding-top: 50px;
+  width: 30%;
 }
 
 .name {
@@ -154,9 +155,11 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .image_zoom {
-  object-fit: cover;
+  object-fit: contain;
+  height: 30em;
 }
 
 .zoom-image {
-  object-fit: cover;
+  object-fit: contain;
+  height: 30em;
 }

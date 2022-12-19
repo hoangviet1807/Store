@@ -164,9 +164,9 @@ export const Cart = () => {
             alignItems: "center",
             flexDirection: "column",
           }}
+          key={index}
         >
           <div
-            key={index}
             style={{
               border: "1px solid #dddddd",
               width: "fit-content",
@@ -174,6 +174,7 @@ export const Cart = () => {
               display: 'flex',
               alignItems: 'center'
             }}
+            key={index}
           >
             <Button
               type="text"
@@ -193,7 +194,6 @@ export const Cart = () => {
             </Button>
           </div>
           <Button
-            key={index}
             onClick={() => handleDeleteProduct(row.id, row.size, row.color)}
             type="text"
             icon={<DeleteOutlined />}

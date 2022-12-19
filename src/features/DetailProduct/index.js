@@ -1,5 +1,5 @@
-import { Button, Tooltip } from "antd";
-import React, { useEffect, useState } from "react";
+import { Button, Tooltip, message } from "antd";
+import React, { useState } from "react";
 import "./style.css";
 import { Input } from "antd";
 import "react-inner-image-zoom/lib/InnerImageZoom/styles.css";
@@ -12,7 +12,6 @@ import { addToCart } from "../../redux/actions/productAction";
 import { Spin, Space } from "antd";
 import { SimpleModal } from "../../components/Modal";
 import { Carousel1 } from "../../components/Carousel";
-import { configImg } from "../../common/constant";
 import { ENV } from "../../config/config";
 
 export const DetailProduct = () => {
@@ -25,6 +24,7 @@ export const DetailProduct = () => {
   const [sizeSelected, setSizeSelected] = useState();
   const [quantity, setQuantity] = useState(1);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
 
 
   const renderLoading = () => {
@@ -39,26 +39,31 @@ export const DetailProduct = () => {
     }
   };
 
+
+  const error = () => {
+    messageApi.open({
+      type: 'error',
+      content: 'Please select size and color',
+    });
+  };
+
   const handleAddToCart = (product) => {
+    if (!Boolean(sizeSelected) || !Boolean(colorSelected)) {
+      error()
+      return false
+    }
     const payload = {
       id: product._id,
       name: product.name,
       price: product.price,
-      color: colorSelected ? colorSelected : data?.color[0],
-      size: sizeSelected ? sizeSelected : data?.size[0],
+      color: colorSelected,
+      size: sizeSelected,
       image: product.attachment[0].fileName,
       quantity: parseInt(quantity),
     };
     dispatch(addToCart(payload));
     setIsModalVisible(true);
   };
-
-  useEffect(() => {
-    if (data) {
-      setColorSelected(data?.colors[0]);
-      setSizeSelected(data?.size[0]);
-    }
-  }, [data]);
 
   const renderModal = () => {
     return (
@@ -69,6 +74,7 @@ export const DetailProduct = () => {
       </SimpleModal>
     );
   };
+
 
   return (
     <>
@@ -81,6 +87,7 @@ export const DetailProduct = () => {
             justifyContent: "center",
           }}
         >
+          {contextHolder}
           {renderModal()}
           <div
             style={{
@@ -96,12 +103,15 @@ export const DetailProduct = () => {
                     display: "flex",
                     justifyContent: "center",
                     paddingBottom: "15px",
+                    width: '30em',
+                    height: '30em',
+                    alignSelf: 'center'
                   }}
                 >
                   <InnerImageZoom
                     src={image ? ENV + image : ENV + data.attachment[0].fileName}
-                    // width='100%'
-                    // height={500}
+                    // width='30em'
+                    // height='30em'
                     hasSpacer={true}
                     zoomSrc={image ? ENV + image : ENV + data.attachment[0].fileName}
                     zoomType="hover"

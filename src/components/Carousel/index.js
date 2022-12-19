@@ -8,11 +8,10 @@ import { ENV } from "../../config/config";
 export const Carousel1 = ({ items, handleClick }) => {
   const imgStyle = {
     width: "100%",
-    objectFit: "cover",
+    objectFit: "contain",
     height: "100px",
   };
 
-  console.log(items.map((val) => val.fileName));
 
   return (
     <Carousel

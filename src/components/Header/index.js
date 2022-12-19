@@ -8,8 +8,6 @@ import { useSelector } from "react-redux";
 import { Mobile } from "../common/isMobile";
 import { useQueryClient } from "react-query";
 
-const { SubMenu } = Menu;
-
 export const Header = () => {
   const queryClient = useQueryClient()
   const navigate = useNavigate();
@@ -38,14 +36,53 @@ export const Header = () => {
   const handleSearch = () => {
     queryClient.removeQueries('search_product')
     navigate(`/search/${searchText}`);
+  }
 
+  const items = [
+    {
+      label: 'HOME',
+      key: '/',
+    },
+    {
+      label: 'CLOTHING',
+      key: '/clothing',
+      children: [
+        {
+          label: 'TEE',
+          key: '/tee',
+        },
+        {
+          label: 'PANT',
+          key: '/pant',
+        },
+        {
+          label: 'ACCESSORIES',
+          key: '/accessories',
+        },
+        {
+          label: 'JACKET',
+          key: '/jacket',
+        },
+      ]
+    },
+    {
+      label: 'ALL ITEMS',
+      key: '/all-items',
+    },
+    {
+      label: 'CONTACT',
+      key: '/contact',
+    },
+  ]
 
+  const handleNavigate = (e) => {
+    navigate(e.key)
   }
 
   const defaultMenu = () => {
     return (
       <div className="menu">
-        <Menu
+        {/* <Menu
           theme="light"
           mode={"horizontal"}
           defaultSelectedKeys={["1"]}
@@ -109,7 +146,11 @@ export const Header = () => {
           >
             CONTACT
           </Menu.Item>
-        </Menu>
+        </Menu> */}
+        <Menu onClick={handleNavigate} theme="light"
+          mode={"horizontal"}
+          defaultSelectedKeys={["1"]}
+          style={{ placeContent: "center", width: "100%" }} items={items} />
         <Menu theme="light" mode="horizontal" className="icon-cart-fs">
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <div>
@@ -118,7 +159,6 @@ export const Header = () => {
             <Badge count={renderQuantity()} size="small">
               <Button
                 type="text"
-                // shape="circle"
                 onClick={() => navigate("/cart")}
                 icon={<ShoppingCartOutlined />}
               />
@@ -138,78 +178,10 @@ export const Header = () => {
         visible={visible}
         style={{ padding: 0 }}
       >
-        <Menu
-          theme="light"
-          mode={"inline"}
+        <Menu onClick={handleNavigate} theme="light"
+          mode={"vertical"}
           defaultSelectedKeys={["1"]}
-          style={{ placeContent: "center", width: "100%" }}
-        >
-          <Menu.Item
-            key="1"
-            onClick={() => {
-              navigate("/");
-              setVisible(false);
-            }}
-          >
-            HOME
-          </Menu.Item>
-          <SubMenu key="SubMenu" title="CLOTHING">
-            <Menu.Item
-              onClick={() => {
-                navigate("/collection/tee");
-                setVisible(false);
-              }}
-              key="setting:1"
-            >
-              TEE
-            </Menu.Item>
-            <Menu.Item
-              onClick={() => {
-                navigate("/collection/pant");
-                setVisible(false);
-              }}
-              key="setting:2"
-            >
-              PANT
-            </Menu.Item>
-            <Menu.Item
-              onClick={() => {
-                navigate("/collection/accessories");
-                setVisible(false);
-              }}
-              key="setting:3"
-            >
-              ACCESSORIES
-            </Menu.Item>
-            <Menu.Item
-              onClick={() => {
-                navigate("/collection/jacket");
-                setVisible(false);
-              }}
-              key="setting:4"
-            >
-              JACKET
-            </Menu.Item>
-          </SubMenu>
-          <Menu.Item
-            onClick={() => {
-              navigate("/collection/all");
-              setVisible(false);
-            }}
-            key="3"
-          >
-            ALL ITEM
-          </Menu.Item>
-          <Menu.Item
-            onClick={() => {
-              navigate("/");
-              setVisible(false);
-            }}
-            key="4"
-          >
-            CONTACT
-          </Menu.Item>
-        </Menu>
+          style={{ placeContent: "center", width: "100%" }} items={items} />
 
         <Menu theme="light" mode="horizontal" className="icon-cart-fs">
           <div>

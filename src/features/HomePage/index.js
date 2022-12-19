@@ -12,7 +12,6 @@ export const HomePage = () => {
     navigate(`/${id}`, { state: { id } });
   };
 
-  console.log("data", data);
   return (
     <>
       {isLoading && <Spin style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }} size="large" />}
@@ -30,7 +29,7 @@ export const HomePage = () => {
                     <img
                       src={ENV + val.attachment[0].fileName}
                       alt="product"
-                      style={{ width: "100%", objectFit: 'cover', height: '22em' }}
+                      style={{ width: "100%", objectFit: 'contain', height: '22em' }}
                       loading="lazy"
                     />
                   </div>
